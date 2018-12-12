@@ -42,25 +42,8 @@
 
 @end
 
-typedef enum {
-    SBJson5ChunkNone,
-    SBJson5ChunkArray,
-    SBJson5ChunkObject,
-} SBJson5ChunkType;
 
 @implementation SBJson5Parser {
-    SBJson5StreamParser *_parser;
-    NSUInteger depth;
-    NSMutableArray *array;
-    NSMutableDictionary *dict;
-    NSMutableArray *keyStack;
-    NSMutableArray *stack;
-    SBJson5ErrorBlock errorHandler;
-    SBJson5ValueBlock valueBlock;
-    SBJson5ChunkType currentType;
-    BOOL supportManyDocuments;
-    BOOL supportPartialDocuments;
-    NSUInteger _maxDepth;
 }
 
 #pragma mark Housekeeping

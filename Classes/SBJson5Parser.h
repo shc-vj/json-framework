@@ -48,6 +48,12 @@ typedef void (^SBJson5ValueBlock)(id item, BOOL* stop);
  */
 typedef void (^SBJson5ErrorBlock)(NSError* error);
 
+typedef enum {
+	SBJson5ChunkNone,
+	SBJson5ChunkArray,
+	SBJson5ChunkObject,
+} SBJson5ChunkType;
+
 
 /**
  Parse one or more chunks of JSON data.
@@ -93,7 +99,27 @@ typedef void (^SBJson5ErrorBlock)(NSError* error);
  considering whether it would suit your application.
 
 */
-@interface SBJson5Parser : NSObject
+@interface SBJson5Parser : NSObject {
+	@protected
+	SBJson5StreamParser *_parser;
+	NSUInteger depth;
+	NSMutableArray *array;
+	NSMutableDictionary *dict;
+	NSMutableArray *keyStack;
+	NSMutableArray *stack;
+	SBJson5ErrorBlock errorHandler;
+	SBJson5ValueBlock valueBlock;
+	SBJson5ChunkType currentType;
+	BOOL supportManyDocuments;
+	BOOL supportPartialDocuments;
+	NSUInteger _maxDepth;
+}
+
+- (id)initWithBlock:(SBJson5ValueBlock)block
+	 allowMultiRoot:(BOOL)multiRoot
+	unwrapRootArray:(BOOL)unwrapRootArray
+		   maxDepth:(NSUInteger)maxDepth
+	   errorHandler:(SBJson5ErrorBlock)eh;
 
 /**
  Create a JSON Parser
